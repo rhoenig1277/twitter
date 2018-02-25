@@ -8,19 +8,31 @@
 
 <div class="jumbotron">
     <h1>Twitter Terms Popularity</h1>
-    <p>Your search for @Model.searchTerm1 & @Model.searchTerm2</p>
-    <div>
-        <div>@Model.searchTerm1 = @Model.searchTermCount1</div>
-        <div>@Model.searchTerm2 = @Model.searchTermCount2</div>
-    </div>
-    
-    <h2>Search Popularity History</h2>
-    @foreach (var item in Model.tweetsCount)
-        {
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <p>
+            Term 1:<input type="text" name="txtSearchTerm1" /><br />
+            Term 2:<input type="text" name="txtSearchTerm1" />
+        </p>
+        <p>
+            <input type="submit" name="btnSearchTweets" value="Search" />
+        </p>
+        <div id="vwTweets" style="width: 30%; float:left;">
+            <p>Your search for @Model.searchTerm1 & @Model.searchTerm2</p>
             <div>
-                @item.searchTerm1,@item.searchTermCount1,@item.searchTerm2,@item.searchTermCount2
-                <hr />
+                <div>@Model.searchTerm1 = @Model.searchTermCount1</div>
+                <div>@Model.searchTerm2 = @Model.searchTermCount2</div>
             </div>
-        }
 
+            <h2>Search Popularity History</h2>
+            @foreach (var item in Model.tweetsCount)
+            {
+                <div>
+                    @item.searchTerm1,@item.searchTermCount1,@item.searchTerm2,@item.searchTermCount2
+                    <hr />
+                </div>
+            }
+        </div>
+    }
 </div>

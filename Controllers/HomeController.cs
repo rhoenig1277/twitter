@@ -12,8 +12,17 @@ namespace twitter.Controllers
 
         public ActionResult Index()
         {
-            string strSearchOne = "Cool Runnings";
-            string strSearchTwo = "Bobsled Jamaica";
+            TweetsModel Model = new TweetsModel();
+            Model.tweetsCount = new List<TweetsModel>();
+            return View(Model);
+        }
+
+        // GET: EventType
+        [HttpPost, ActionName("Index")]
+        public ActionResult SearchTwitterPost(string txtSearchTerm1, string txtSearchTerm2)
+        {
+            string strSearchOne = txtSearchTerm1; //"Cool Runnings";
+            string strSearchTwo = txtSearchTerm2;
             int tweetCountTerm1 = 0;
             int tweetCountTerm2 = 0;
             List<TweetsModel> rtnResponse = new List<TweetsModel>();
