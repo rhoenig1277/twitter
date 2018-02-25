@@ -35,6 +35,9 @@ namespace twitter.App_Code
             }
             catch (MySqlException ex)
             {
+                //Need to send this to a log
+                string strError = "";
+                strError = ex.ToString();
                 return false;
             }
         }
@@ -49,12 +52,15 @@ namespace twitter.App_Code
             }
             catch (MySqlException ex)
             {
+                //Need to send this to a log
+                string strError = "";
+                strError = ex.ToString();
                 return false;
             }
         }
 
         ////Insert statement
-        public void Insert(string strQuery, TweetsModel tweetModel)
+        public bool Insert(string strQuery, TweetsModel tweetModel)
         {
             try
             {
@@ -89,13 +95,20 @@ namespace twitter.App_Code
 
                     //close connection
                     this.CloseConnection();
+
+                    return true;
                 }
             }
             catch (Exception ex)
             {
+                //Need to send this to a log
                 string strError = "";
                 strError = ex.ToString();
+
+                return false;
             }
+
+            return true;
         }
         
         ////Select statement
@@ -116,7 +129,6 @@ namespace twitter.App_Code
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     //Execute command
-                    //cmd.ExecuteNonQuery();
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -138,6 +150,7 @@ namespace twitter.App_Code
             }
             catch (Exception ex)
             {
+                //Need to send this to a log
                 string strError = "";
                 strError = ex.ToString();
 

@@ -17,5 +17,6 @@ namespace twitter.Models
         public int searchTermCount2 { get; set; }
         public IList<TweetsModel> tweetsCount { get; set; }
         public bool showTweets { get; set; }
+        public string strError { get; set; }
     }
 }

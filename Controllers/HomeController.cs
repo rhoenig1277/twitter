@@ -26,21 +26,45 @@ namespace twitter.Controllers
             int tweetCountTerm1 = 0;
             int tweetCountTerm2 = 0;
             List<TweetsModel> rtnResponse = new List<TweetsModel>();
-                        
-            tweetCountTerm1 = GetTweets(strSearchOne);
-            tweetCountTerm2 = GetTweets(strSearchTwo);
+            TweetsModel Model = new TweetsModel { tweetsCount = rtnResponse };
 
-            SetTweets(strSearchOne, tweetCountTerm1, strSearchTwo, tweetCountTerm2);
+            if (strSearchOne != "")
+            { 
+                tweetCountTerm1 = GetTweets(strSearchOne);
+            }
+            else
+            {
+                Model.strError = "Term 1 box needs to be populated.";
+            }
+
+            if (strSearchTwo != "")
+            {
+                tweetCountTerm2 = GetTweets(strSearchTwo);
+            }
+            else
+            {
+                if (Model.strError != "")
+                { 
+                    Model.strError += "<br>";
+                }
+                Model.strError += "Term 2 box needs to be populated.";
+            }
+
+            if (Model.strError != null && Model.strError != "")
+            {
+                return View(Model);
+            }
+
+            bool blnSuccess = SetTweets(strSearchOne, tweetCountTerm1, strSearchTwo, tweetCountTerm2);
 
             rtnResponse = GetTweetList();
-
-            TweetsModel Model = new TweetsModel { tweetsCount = rtnResponse };
 
             Model.searchTerm1 = strSearchOne;
             Model.searchTermCount1 = tweetCountTerm1;
             Model.searchTerm2 = strSearchTwo;
             Model.searchTermCount2 = tweetCountTerm2;
             Model.showTweets = true;
+            Model.tweetsCount = rtnResponse;
 
             return View(Model);
         }
@@ -59,11 +83,11 @@ namespace twitter.Controllers
             return View();
         }
 
-        public void SetTweets(string strTerm1, int intCount1, string strTerm2, int intCount2)
+        public bool SetTweets(string strTerm1, int intCount1, string strTerm2, int intCount2)
         {
             twitterAccess = new TwitterAccess();
 
-            twitterAccess.SetTwitterData(strTerm1, intCount1, strTerm2, intCount2);
+            return twitterAccess.SetTwitterData(strTerm1, intCount1, strTerm2, intCount2);
         }
 
         public int GetTweets(string strTerm)

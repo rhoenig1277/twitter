@@ -22,3 +22,24 @@ select,
 textarea {
     max-width: 280px;
 }
+
+hr {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.thicker {
+    border: none;
+    height: 3px;
+    /* Set the hr color */
+    color: #333; /* old IE */
+    background-color: #333; /* Modern Browsers */
+}
+
+.thick {
+    border: none;
+    height: 1px;
+    /* Set the hr color */
+    color: #333; /* old IE */
+    background-color: #333; /* Modern Browsers */
+}

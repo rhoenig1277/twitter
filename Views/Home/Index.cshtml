@@ -8,31 +8,39 @@
 
 <div class="jumbotron">
     <h1>Twitter Terms Popularity</h1>
+    <p>Enter 2 terms in the boxes below to check the popularity of words tweeted.</p>
     @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         @Html.AntiForgeryToken()
-    <p>
-        @Html.Label("Term 1:") @Html.TextBox("txtSearchTerm1", Model.searchTerm1) <br />
-        @Html.Label("Term 2:") @Html.TextBox("txtSearchTerm2", Model.searchTerm2)
-    </p>
+        <p>
+            @Html.Label("Term 1:") @Html.TextBox("txtSearchTerm1", Model.searchTerm1) <br />
+            @Html.Label("Term 2:") @Html.TextBox("txtSearchTerm2", Model.searchTerm2)
+            @if (Model.strError != "") {<br /><span class="error">@Model.strError</span>}
+        </p>
         <p>
             <input type="submit" name="btnSearchTweets" value="Search" id="searchTweets" />
         </p>
         if (Model.showTweets) { 
             <div id="vwTweets" style="width: 100%; float:left;">
-                <p>Your search for @Model.searchTerm1 & @Model.searchTerm2</p>
+                <p><b>Your popularity search:</b> @Model.searchTerm1 = @Model.searchTermCount1 compared to @Model.searchTerm2 = @Model.searchTermCount2</p>
                 <div>
-                    <div>@Model.searchTerm1 = @Model.searchTermCount1</div>
-                    <div>@Model.searchTerm2 = @Model.searchTermCount2</div>
+                    @if (Model.searchTermCount1 > Model.searchTermCount2) {
+                        <p><b>@Model.searchTerm1</b> had more popularity than <b>@Model.searchTerm2</b></p>
+                    } else if(Model.searchTermCount1 < Model.searchTermCount2) {
+                        <p><b>@Model.searchTerm2</b> had more popularity than <b>@Model.searchTerm1</b></p>
+                    } else {
+                        <p><b>@Model.searchTerm1</b> and <b>@Model.searchTerm2</b> have equal popularity</p>
+                    }
                 </div>
-
-                <h2>Search Popularity History</h2>
+                <hr class="thicker" />
+                <h2>Search History</h2>
+                <hr class="thick" />
                 @foreach (var item in Model.tweetsCount)
                 {
-                    <div>
-                        @item.searchTerm1,@item.searchTermCount1,@item.searchTerm2,@item.searchTermCount2
-                        <hr />
-                    </div>
+                <div>
+                    <b>@item.searchTerm1 = @item.searchTermCount1</b> compared to <b>@item.searchTerm2 = @item.searchTermCount2</b>
+                <hr />
+                </div>
                 }
             </div>
         }
