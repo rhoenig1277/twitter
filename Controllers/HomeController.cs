@@ -43,8 +43,8 @@ namespace twitter.Controllers
             }
             else
             {
-                if (Model.strError != "")
-                { 
+                if (Model.strError != null && Model.strError != "")
+                {
                     Model.strError += "<br>";
                 }
                 Model.strError += "Term 2 box needs to be populated.";

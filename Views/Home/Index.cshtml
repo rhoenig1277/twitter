@@ -3,7 +3,7 @@
 @model TweetsModel
 
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Twitter Search Page";
 }
 
 <div class="jumbotron">
@@ -15,7 +15,7 @@
         <p>
             @Html.Label("Term 1:") @Html.TextBox("txtSearchTerm1", Model.searchTerm1) <br />
             @Html.Label("Term 2:") @Html.TextBox("txtSearchTerm2", Model.searchTerm2)
-            @if (Model.strError != "") {<br /><span class="error">@Model.strError</span>}
+            @if (Model.strError != "") {<br /><span class="error">@Html.Raw(Model.strError)</span>}
         </p>
         <p>
             <input type="submit" name="btnSearchTweets" value="Search" id="searchTweets" />

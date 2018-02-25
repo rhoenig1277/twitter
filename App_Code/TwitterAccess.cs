@@ -47,7 +47,7 @@ namespace twitter.App_Code
 
             try { 
                 // Create a new set of credentials for the application.
-                var appCredentials = new TwitterCredentials(oauth_consumer_key, oauth_consumer_secret, oauth_access_token, oauth_token_secret);
+                var appCredentials = new TwitterCredentials(oauth_consumer_key, oauth_consumer_secret, oauth_token_secret, oauth_token_secret);
 
                 // Use the user credentials in your application
                 Auth.SetCredentials(appCredentials);

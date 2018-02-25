@@ -103,7 +103,7 @@ namespace twitter.App_Code
             {
                 //Need to send this to a log
                 string strError = "";
-                strError = ex.ToString();
+                strError = "Error Occured Inserting tweets:"+ ex.ToString();
 
                 return false;
             }
@@ -153,8 +153,13 @@ namespace twitter.App_Code
                 //Need to send this to a log
                 string strError = "";
                 strError = ex.ToString();
-
+                
                 rtnResponse = new List<twitter.Models.TweetsModel>();
+                TweetsModel tweetModel = new TweetsModel();
+
+                tweetModel.strError += "Error Occured Select tweets: "+strError;
+
+                rtnResponse.Add(tweetModel);
                 return rtnResponse;
             }
         }
