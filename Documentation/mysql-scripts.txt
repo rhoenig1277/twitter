@@ -25,3 +25,15 @@ SELECT * FROM twittercount order by create_date desc;
 END$$
 
 DELIMITER ;
+
+--This will create the table needed to store the tweets
+CREATE TABLE `twittercount` (
+  `id` varchar(255) NOT NULL,
+  `searchTerm1` varchar(255) DEFAULT NULL,
+  `searchTerm1Count` int(11) DEFAULT NULL,
+  `searchTerm2` varchar(255) DEFAULT NULL,
+  `searchTerm2Count` int(11) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
