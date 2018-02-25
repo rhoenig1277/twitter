@@ -1,1 +1,1 @@
-﻿
+﻿Description: The Twitter Popularity Search allows you to search twitter's API and see how many times the terms have been searched in the past 7 days.
