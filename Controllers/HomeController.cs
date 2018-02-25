@@ -19,14 +19,19 @@ namespace twitter.Controllers
 
         // GET: EventType
         [HttpPost, ActionName("Index")]
-        public ActionResult SearchTwitterPost(string txtSearchTerm1, string txtSearchTerm2)
+        public ActionResult SearchTwitterPost(string btnClearSearch, string txtSearchTerm1, string txtSearchTerm2)
         {
             string strSearchOne = txtSearchTerm1;
             string strSearchTwo = txtSearchTerm2;
             int tweetCountTerm1 = 0;
             int tweetCountTerm2 = 0;
             List<TweetsModel> rtnResponse = new List<TweetsModel>();
-            TweetsModel Model = new TweetsModel { tweetsCount = rtnResponse };
+            TweetsModel Model = new TweetsModel();
+
+            if (btnClearSearch != null && btnClearSearch.ToLower() == "clear")
+            {
+                return RedirectToAction("Index","Home");
+            }
 
             if (strSearchOne != "")
             { 
@@ -68,21 +73,7 @@ namespace twitter.Controllers
 
             return View(Model);
         }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
+        
         public bool SetTweets(string strTerm1, int intCount1, string strTerm2, int intCount2)
         {
             twitterAccess = new TwitterAccess();

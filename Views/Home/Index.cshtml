@@ -18,7 +18,7 @@
             @if (Model.strError != "") {<br /><span class="error">@Html.Raw(Model.strError)</span>}
         </p>
         <p>
-            <input type="submit" name="btnSearchTweets" value="Search" id="searchTweets" />
+            <input type="submit" name="btnSearchTweets" value="Search" id="searchTweets" /> <input type="submit" name="btnClearSearch" value="Clear" id="searchTweets" />
         </p>
         if (Model.showTweets) { 
             <div id="vwTweets" style="width: 100%; float:left;">
