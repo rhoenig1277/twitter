@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using MySql.Data.MySqlClient;
+using twitter.Models;
 
 namespace twitter.App_Code
 {
@@ -52,53 +54,96 @@ namespace twitter.App_Code
         }
 
         ////Insert statement
-        public void Insert(string query)
+        public void Insert(string strQuery, TweetsModel tweetModel)
         {
-            //open connection
-            if (this.OpenConnection() == true)
+            try
             {
-                //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, connection);
+                //open connection
+                if (this.OpenConnection() == true)
+                {
+                    //create command and assign the query and connection from the constructor
+                    MySqlCommand cmd = new MySqlCommand
+                    {
+                        Connection = connection,
+                        CommandText = strQuery,
+                        CommandType = CommandType.StoredProcedure
+                    };
 
-                //Execute command
-                cmd.ExecuteNonQuery();
+                    cmd.Parameters.AddWithValue("@tweetID", tweetModel.tweetID);
+                    cmd.Parameters["@tweetID"].Direction = ParameterDirection.Input;
 
-                //close connection
-                this.CloseConnection();
+                    cmd.Parameters.AddWithValue("@searchTerm1", tweetModel.searchTerm1);
+                    cmd.Parameters["@searchTerm1"].Direction = ParameterDirection.Input;
+
+                    cmd.Parameters.AddWithValue("@searchTerm1Count", tweetModel.searchTermCount1);
+                    cmd.Parameters["@searchTerm1Count"].Direction = ParameterDirection.Input;
+
+                    cmd.Parameters.AddWithValue("@searchTerm2", tweetModel.searchTerm2);
+                    cmd.Parameters["@searchTerm2"].Direction = ParameterDirection.Input;
+
+                    cmd.Parameters.AddWithValue("@searchTerm2Count", tweetModel.searchTermCount2);
+                    cmd.Parameters["@searchTerm2Count"].Direction = ParameterDirection.Input;
+
+                    //Execute command
+                    cmd.ExecuteNonQuery();
+
+                    //close connection
+                    this.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                string strError = "";
+                strError = ex.ToString();
             }
         }
         
         ////Select statement
-        public List<twitter.Models.TweetsModel> Select(string query)
+        public List<twitter.Models.TweetsModel> Select(string strQuery)
         {
             List<twitter.Models.TweetsModel> rtnResponse = new List<twitter.Models.TweetsModel>();
 
-            //open connection
-            if (this.OpenConnection() == true)
+            try
             {
-                //create command and assign the query and connection from the constructor
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-
-                //Execute command
-                //cmd.ExecuteNonQuery();
-                using (var reader = cmd.ExecuteReader())
+                //open connection
+                if (this.OpenConnection() == true)
                 {
-                    while (reader.Read())
+                    //create command and assign the query and connection from the constructor
+                    MySqlCommand cmd = new MySqlCommand();
+
+                    cmd.Connection = connection;
+                    cmd.CommandText = strQuery;
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    //Execute command
+                    //cmd.ExecuteNonQuery();
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        twitter.Models.TweetsModel tweetModel = new twitter.Models.TweetsModel();
-                        tweetModel.searchTerm1 = reader.GetString(reader.GetOrdinal("searchTerm1")).ToString();
-                        tweetModel.searchTermCount1 = reader.GetString(reader.GetOrdinal("searchTerm1Count")).ToString();
-                        tweetModel.searchTerm2 = reader.GetString(reader.GetOrdinal("searchTerm2")).ToString();
-                        tweetModel.searchTermCount2 = reader.GetString(reader.GetOrdinal("searchTerm2Count")).ToString();
-                        rtnResponse.Add(tweetModel);
+                        while (reader.Read())
+                        {
+                            twitter.Models.TweetsModel tweetModel = new twitter.Models.TweetsModel();
+                            tweetModel.searchTerm1 = reader.GetString(reader.GetOrdinal("searchTerm1")).ToString();
+                            tweetModel.searchTermCount1 =  int.Parse(reader.GetString(reader.GetOrdinal("searchTerm1Count")));
+                            tweetModel.searchTerm2 = reader.GetString(reader.GetOrdinal("searchTerm2")).ToString();
+                            tweetModel.searchTermCount2 = int.Parse(reader.GetString(reader.GetOrdinal("searchTerm2Count")));
+                            rtnResponse.Add(tweetModel);
+                        }
                     }
+
+                    //close connection
+                    this.CloseConnection();
                 }
 
-                //close connection
-                this.CloseConnection();
+                return rtnResponse;
             }
+            catch (Exception ex)
+            {
+                string strError = "";
+                strError = ex.ToString();
 
-            return rtnResponse;
+                rtnResponse = new List<twitter.Models.TweetsModel>();
+                return rtnResponse;
+            }
         }
     }
 }

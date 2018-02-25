@@ -21,35 +21,27 @@ namespace twitter.Controllers
         [HttpPost, ActionName("Index")]
         public ActionResult SearchTwitterPost(string txtSearchTerm1, string txtSearchTerm2)
         {
-            string strSearchOne = txtSearchTerm1; //"Cool Runnings";
+            string strSearchOne = txtSearchTerm1;
             string strSearchTwo = txtSearchTerm2;
             int tweetCountTerm1 = 0;
             int tweetCountTerm2 = 0;
             List<TweetsModel> rtnResponse = new List<TweetsModel>();
-            string searchQ1 = System.Configuration.ConfigurationManager.AppSettings["twitterAPI"] + strSearchOne;
-            string searchQ2 = System.Configuration.ConfigurationManager.AppSettings["twitterAPI"] + strSearchTwo;
+                        
+            tweetCountTerm1 = GetTweets(strSearchOne);
+            tweetCountTerm2 = GetTweets(strSearchTwo);
 
-            try
-            {
-                tweetCountTerm1 = GetTweets(searchQ1);
-                tweetCountTerm2 = GetTweets(searchQ2);
+            SetTweets(strSearchOne, tweetCountTerm1, strSearchTwo, tweetCountTerm2);
 
-                SetTweets(strSearchOne, tweetCountTerm1, strSearchTwo, tweetCountTerm2);
-
-                rtnResponse = GetTweetList();
-            }
-            catch (Exception ex)
-            {
-                string strError = "";
-                strError = ex.ToString();
-            }
+            rtnResponse = GetTweetList();
 
             TweetsModel Model = new TweetsModel { tweetsCount = rtnResponse };
 
             Model.searchTerm1 = strSearchOne;
-            Model.searchTermCount1 = tweetCountTerm1.ToString();
+            Model.searchTermCount1 = tweetCountTerm1;
             Model.searchTerm2 = strSearchTwo;
-            Model.searchTermCount2 = tweetCountTerm2.ToString();
+            Model.searchTermCount2 = tweetCountTerm2;
+            Model.showTweets = true;
+
             return View(Model);
         }
 
