@@ -1,0 +1,27 @@
+﻿--This setups up the sproc to put the tweets and counts into the database
+USE `mysqldatabase28603`;
+DROP procedure IF EXISTS `putTweetSearch`;
+
+DELIMITER $$
+USE `mysqldatabase28603`$$
+CREATE DEFINER=`mysqldbuser`@`%` PROCEDURE `putTweetSearch`(IN tweetID varchar(255),IN searchTerm1 varchar(255),IN searchTerm1Count int,IN searchTerm2 varchar(255),IN searchTerm2Count int)
+BEGIN
+    Insert into twittercount
+    (id,searchTerm1,searchTerm1Count,searchTerm2,searchTerm2Count,create_date) 
+    VALUES (tweetID, searchTerm1, searchTerm1Count, searchTerm2, searchTerm2Count, CURDATE());
+END$$
+
+DELIMITER ;
+
+--This setups up the sproc to Get the Historical Tweets
+USE `mysqldatabase28603`;
+DROP procedure IF EXISTS `getTweetCount`;
+
+DELIMITER $$
+USE `mysqldatabase28603`$$
+CREATE DEFINER=`mysqldbuser`@`%` PROCEDURE `getTweetCount`()
+BEGIN
+SELECT * FROM twittercount order by create_date desc;
+END$$
+
+DELIMITER ;
