@@ -90,6 +90,24 @@ namespace twitter.App_Code
                     cmd.Parameters.AddWithValue("@searchTerm2Count", tweetModel.searchTermCount2);
                     cmd.Parameters["@searchTerm2Count"].Direction = ParameterDirection.Input;
 
+                    cmd.Parameters.AddWithValue("@proximity", tweetModel.proximity);
+                    cmd.Parameters["@proximity"].Direction = ParameterDirection.Input;
+
+                    cmd.Parameters.AddWithValue("@addressFrom", tweetModel.addressFrom);
+                    cmd.Parameters["@addressFrom"].Direction = ParameterDirection.Input;
+
+                    cmd.Parameters.AddWithValue("@avgTermsPerMin1", tweetModel.avgTermsPerMin1);
+                    cmd.Parameters["@avgTermsPerMin1"].Direction = ParameterDirection.Input;
+
+                    cmd.Parameters.AddWithValue("@avgTermsPerMin2", tweetModel.avgTermsPerMin2);
+                    cmd.Parameters["@avgTermsPerMin2"].Direction = ParameterDirection.Input;
+
+                    cmd.Parameters.AddWithValue("@avgTermsPerHour1", tweetModel.avgTermsPerHour1);
+                    cmd.Parameters["@avgTermsPerHour1"].Direction = ParameterDirection.Input;
+
+                    cmd.Parameters.AddWithValue("@avgTermsPerHour2", tweetModel.avgTermsPerHour2);
+                    cmd.Parameters["@avgTermsPerHour2"].Direction = ParameterDirection.Input;
+
                     //Execute command
                     cmd.ExecuteNonQuery();
 
@@ -134,10 +152,53 @@ namespace twitter.App_Code
                         while (reader.Read())
                         {
                             twitter.Models.TweetsModel tweetModel = new twitter.Models.TweetsModel();
-                            tweetModel.searchTerm1 = reader.GetString(reader.GetOrdinal("searchTerm1")).ToString();
-                            tweetModel.searchTermCount1 =  int.Parse(reader.GetString(reader.GetOrdinal("searchTerm1Count")));
-                            tweetModel.searchTerm2 = reader.GetString(reader.GetOrdinal("searchTerm2")).ToString();
-                            tweetModel.searchTermCount2 = int.Parse(reader.GetString(reader.GetOrdinal("searchTerm2Count")));
+                            tweetModel.searchTerm1 = "";
+                            tweetModel.searchTermCount1 = 0;
+                            tweetModel.searchTerm2 = "";
+                            tweetModel.searchTermCount2 = 0;
+                            tweetModel.proximity = "";
+                            tweetModel.addressFrom = "";
+                            tweetModel.avgTermsPerHour1 = 0;
+                            tweetModel.avgTermsPerHour2 = 0;
+                            tweetModel.avgTermsPerMin1 = 0;
+                            tweetModel.avgTermsPerMin2 = 0;
+
+                            if (!reader.IsDBNull(reader.GetOrdinal("searchTerm1")))
+                            {
+                                tweetModel.searchTerm1 = reader.GetString(reader.GetOrdinal("searchTerm1")).ToString();
+                            }
+                            if (!reader.IsDBNull(reader.GetOrdinal("searchTerm1Count")))
+                            {
+                                tweetModel.searchTermCount1 = int.Parse(reader.GetString(reader.GetOrdinal("searchTerm1Count")));
+                            }
+                            if (!reader.IsDBNull(reader.GetOrdinal("searchTerm2")))
+                            {
+                                tweetModel.searchTerm2 = reader.GetString(reader.GetOrdinal("searchTerm2")).ToString();
+                            }
+                            if (!reader.IsDBNull(reader.GetOrdinal("searchTerm2Count")))
+                            {
+                                tweetModel.searchTermCount2 = int.Parse(reader.GetString(reader.GetOrdinal("searchTerm2Count")));
+                            }
+                            if (!reader.IsDBNull(reader.GetOrdinal("proximity")))
+                            {
+                                tweetModel.proximity = reader.GetString(reader.GetOrdinal("proximity")).ToString();
+                            }
+                            if (!reader.IsDBNull(reader.GetOrdinal("addressFrom")))
+                            {
+                                tweetModel.addressFrom = reader.GetString(reader.GetOrdinal("addressFrom")).ToString();
+                            }
+                            if (!reader.IsDBNull(reader.GetOrdinal("avgTermsPerHour1")))
+                            {
+                                tweetModel.addressFrom = reader.GetString(reader.GetOrdinal("avgTermsPerHour2")).ToString();
+                            }
+                            if (!reader.IsDBNull(reader.GetOrdinal("avgTermsPerMin1")))
+                            {
+                                tweetModel.addressFrom = reader.GetString(reader.GetOrdinal("avgTermsPerMin1")).ToString();
+                            }
+                            if (!reader.IsDBNull(reader.GetOrdinal("avgTermsPerMin2")))
+                            {
+                                tweetModel.addressFrom = reader.GetString(reader.GetOrdinal("avgTermsPerMin2")).ToString();
+                            }
                             rtnResponse.Add(tweetModel);
                         }
                     }

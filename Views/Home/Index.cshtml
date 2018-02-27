@@ -12,37 +12,51 @@
     @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         @Html.AntiForgeryToken()
-        <p>
-            @Html.Label("Term 1:") @Html.TextBox("txtSearchTerm1", Model.searchTerm1) <br />
-            @Html.Label("Term 2:") @Html.TextBox("txtSearchTerm2", Model.searchTerm2)
-            @if (Model.strError != "") {<br /><span class="error">@Html.Raw(Model.strError)</span>}
-        </p>
+    <p>
+        @Html.Label("Term 1:") @Html.TextBox("txtSearchTerm1", Model.searchTerm1) <br />
+        @Html.Label("Term 2:") @Html.TextBox("txtSearchTerm2", Model.searchTerm2) <br />
+        Enter an address (City, State) or (Street, City, State) to search within<br />
+        @Html.Label("Address From:") @Html.TextBox("txtAddressFrom", Model.addressFrom) <br />
+        Enter a proximity to narrow your search.  The larger the proximity the longer the search will take.<br />
+        @Html.Label("Proximity (miles):") @Html.TextBox("txtProximity", Model.proximity)
+        @if (Model.strError != "")
+    {<br /><span class="error">@Html.Raw(Model.strError)</span>}
+    </p>
         <p>
             <input type="submit" name="btnSearchTweets" value="Search" id="searchTweets" /> <input type="submit" name="btnClearSearch" value="Clear" id="searchTweets" />
         </p>
         if (Model.showTweets) { 
-            <div id="vwTweets" style="width: 100%; float:left;">
-                <p><b>Your popularity search:</b> @Model.searchTerm1 = @Model.searchTermCount1 compared to @Model.searchTerm2 = @Model.searchTermCount2</p>
-                <div>
-                    @if (Model.searchTermCount1 > Model.searchTermCount2) {
-                        <p><b>@Model.searchTerm1</b> had more popularity than <b>@Model.searchTerm2</b></p>
-                    } else if(Model.searchTermCount1 < Model.searchTermCount2) {
-                        <p><b>@Model.searchTerm2</b> had more popularity than <b>@Model.searchTerm1</b></p>
-                    } else {
-                        <p><b>@Model.searchTerm1</b> and <b>@Model.searchTerm2</b> have equal popularity</p>
-                    }
-                </div>
-                <hr class="thicker" />
-                <h2>Search History</h2>
-                <hr class="thick" />
-                @foreach (var item in Model.tweetsCount)
+        <div id="vwTweets" style="width: 100%; float:left;">
+            <p><b>Your popularity search:</b> @Model.searchTerm1 = @Model.searchTermCount1 compared to @Model.searchTerm2 = @Model.searchTermCount2</p>
+            <p><b>@Model.searchTerm1 was searched on average every @Model.avgTermsPerHour1 hours</b></p>
+            <p><b>@Model.searchTerm2 was searched on average every @Model.avgTermsPerHour2 hours</b></p>
+            <div>
+                @if (Model.searchTermCount1 > Model.searchTermCount2)
                 {
-                <div>
-                    <b>@item.searchTerm1 = @item.searchTermCount1</b> compared to <b>@item.searchTerm2 = @item.searchTermCount2</b>
-                <hr />
-                </div>
+                    <p><b>@Model.searchTerm1</b> was more popular than <b>@Model.searchTerm2</b> in a <b>@Model.proximity</b> mile radius of <b>@Model.addressFrom</b></p>
+                }
+                else if (Model.searchTermCount1 < Model.searchTermCount2)
+                {
+                    <p><b>@Model.searchTerm2</b> was more popular than <b>@Model.searchTerm1</b> in a <b>@Model.proximity</b> mile radius of <b>@Model.addressFrom</b></p>
+                }
+                else
+                {
+                    <p><b>@Model.searchTerm1</b> and <b>@Model.searchTerm2</b> have equal popularity in a <b>@Model.proximity</b> mile radius of <b>@Model.addressFrom</b></p>
                 }
             </div>
+            <hr class="thicker" />
+            <h2>Search History</h2>
+            <hr class="thick" />
+            @foreach (var item in Model.tweetsCount)
+    {
+            <div>
+                <p><b>@item.searchTerm1 = @item.searchTermCount1</b> compared to <b>@item.searchTerm2 = @item.searchTermCount2</b> in a <b>@item.proximity</b> mile radius of <b>@item.addressFrom</b></p>
+                <p><b>@Model.searchTerm1 was searched on average every @Model.avgTermsPerHour1 hours</b></p>
+                <p><b>@Model.searchTerm2 was searched on average every @Model.avgTermsPerHour2 hours</b></p>
+                <hr />
+            </div>
+}
+        </div>
         }
     }
 </div>

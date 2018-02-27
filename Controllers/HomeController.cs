@@ -14,19 +14,33 @@ namespace twitter.Controllers
         {
             TweetsModel Model = new TweetsModel();
             Model.tweetsCount = new List<TweetsModel>();
+
+            Model.addressFrom = "Beloit, WI";
+            Model.proximity = "10";
+
             return View(Model);
         }
 
         // GET: EventType
         [HttpPost, ActionName("Index")]
-        public ActionResult SearchTwitterPost(string btnClearSearch, string txtSearchTerm1, string txtSearchTerm2)
+        public ActionResult SearchTwitterPost(string btnClearSearch, string txtSearchTerm1, string txtSearchTerm2, string txtAddressFrom, string txtProximity)
         {
             string strSearchOne = txtSearchTerm1;
             string strSearchTwo = txtSearchTerm2;
             int tweetCountTerm1 = 0;
             int tweetCountTerm2 = 0;
+            int term1AvgHoursBetweenTweets = 0;
+            int term1AvgMinutesBetweenTweets = 0;
+            int term2AvgHoursBetweenTweets = 0;
+            int term2AvgMinutesBetweenTweets = 0;
             List<TweetsModel> rtnResponse = new List<TweetsModel>();
             TweetsModel Model = new TweetsModel();
+            TweetsModel tempModel = new TweetsModel();
+
+            System.Guid tweetID = Guid.NewGuid();
+            Model.tweetID = tweetID.ToString();
+            Model.addressFrom = txtAddressFrom;
+            Model.proximity = txtProximity;
 
             if (btnClearSearch != null && btnClearSearch.ToLower() == "clear")
             {
@@ -34,8 +48,21 @@ namespace twitter.Controllers
             }
 
             if (strSearchOne != "")
-            { 
-                tweetCountTerm1 = GetTweets(strSearchOne);
+            {
+                tempModel = new TweetsModel();
+                tempModel = GetTweets(strSearchOne, txtAddressFrom, txtProximity);
+                if (tempModel.strError == null || tempModel.strError == "")
+                {
+                    tweetCountTerm1 = tempModel.searchTermCount1;
+                    Model.searchTerm1 = strSearchOne;
+                    Model.avgTermsPerHour1 = tempModel.tweetsPerhr;
+                    Model.avgTermsPerMin1 = tempModel.tweetsPerMin;
+                    Model.searchTermCount1 = tempModel.searchTermCount1;
+                } else
+                {
+                    Model.strError = tempModel.strError;
+                }
+                
             }
             else
             {
@@ -44,7 +71,20 @@ namespace twitter.Controllers
 
             if (strSearchTwo != "")
             {
-                tweetCountTerm2 = GetTweets(strSearchTwo);
+                tempModel = new TweetsModel();
+                tempModel = GetTweets(strSearchTwo, txtAddressFrom, txtProximity);
+                if (tempModel.strError == null || tempModel.strError == "")
+                {
+                    tweetCountTerm1 = tempModel.searchTermCount1;
+                    Model.searchTerm2 = strSearchTwo;
+                    Model.avgTermsPerHour2 = tempModel.tweetsPerhr;
+                    Model.avgTermsPerMin2 = tempModel.tweetsPerMin;
+                    Model.searchTermCount2 = tempModel.searchTermCount1;
+                }
+                else
+                {
+                    Model.strError = tempModel.strError;
+                }
             }
             else
             {
@@ -60,34 +100,32 @@ namespace twitter.Controllers
                 return View(Model);
             }
 
-            bool blnSuccess = SetTweets(strSearchOne, tweetCountTerm1, strSearchTwo, tweetCountTerm2);
+            // Insert Tweet Model into Database for History.
+            bool blnSuccess = SetTweets(Model);
 
+            // Get Tweets from Datbase
             rtnResponse = GetTweetList();
 
-            Model.searchTerm1 = strSearchOne;
-            Model.searchTermCount1 = tweetCountTerm1;
-            Model.searchTerm2 = strSearchTwo;
-            Model.searchTermCount2 = tweetCountTerm2;
             Model.showTweets = true;
             Model.tweetsCount = rtnResponse;
-
+            
             return View(Model);
         }
         
-        public bool SetTweets(string strTerm1, int intCount1, string strTerm2, int intCount2)
+        public bool SetTweets(TweetsModel tweetModel)
         {
             twitterAccess = new TwitterAccess();
 
-            return twitterAccess.SetTwitterData(strTerm1, intCount1, strTerm2, intCount2);
+            return twitterAccess.SetTwitterData(tweetModel);
         }
 
-        public int GetTweets(string strTerm)
+        public TweetsModel GetTweets(string strTerm, string addressFrom, string proximity)
         {
-            int tweetCountTerm1;
+            TweetsModel Model = new TweetsModel();
             twitterAccess = new TwitterAccess();
 
-            tweetCountTerm1 = twitterAccess.GetTweetCount(strTerm);
-            return tweetCountTerm1;
+            TweetsModel tweetModel = twitterAccess.GetTweetCount(strTerm, addressFrom, proximity);
+            return tweetModel;
         }
 
         public List<TweetsModel> GetTweetList()
