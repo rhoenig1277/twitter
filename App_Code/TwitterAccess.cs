@@ -111,19 +111,14 @@ namespace twitter.App_Code
         public string GetCoordinates(ref string longitude, ref string latitude, string addressFrom)
         {
             string google_api_key = System.Configuration.ConfigurationManager.AppSettings["google_api_key"];
-            string strMessage = "";
 
             try
             {
-                //always need to use YOUR_API_KEY for requests.  Do this in App_Start.
                 GoogleSigned.AssignAllServices(new GoogleSigned(google_api_key));
 
                 var request = new GeocodingRequest();
                 request.Address = addressFrom;
                 var response = new GeocodingService().GetResponse(request);
-
-                //The GeocodingService class submits the request to the API web service, and returns the
-                //response strongly typed as a GeocodeResponse object which may contain zero, one or more results.
 
                 //Assuming we received at least one result, let's get some of its properties:
                 if (response.Status == ServiceResponseStatus.Ok && response.Results.Count() > 0)
@@ -139,7 +134,6 @@ namespace twitter.App_Code
                 {
                     throw new System.ArgumentException();
                 }
-                //End Google Geocoding
             }
             catch (Exception ex)
             {
