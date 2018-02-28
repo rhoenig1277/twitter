@@ -137,15 +137,14 @@ namespace twitter.App_Code
                 }
                 else
                 {
-                    strMessage = "No Longitude/Latitude Found for " + addressFrom;
-                    throw new System.ArgumentException(strMessage);
+                    throw new System.ArgumentException();
                 }
                 //End Google Geocoding
             }
             catch (Exception ex)
             {
                 string strError = "";
-                strError = ex.ToString();
+                strError = "No Longitude/Latitude Found for " + addressFrom;
                 return strError;
             }
         }

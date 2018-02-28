@@ -48,14 +48,29 @@
             <h2>Search History</h2>
             <hr class="thick" />
             @foreach (var item in Model.tweetsCount)
-    {
+            {
             <div>
-                <p><b>@item.searchTerm1 = @item.searchTermCount1</b> compared to <b>@item.searchTerm2 = @item.searchTermCount2</b> in a <b>@item.proximity</b> mile radius of <b>@item.addressFrom</b></p>
-                <p><b>@Model.searchTerm1 was searched on average every @Model.avgTermsPerHour1 hours</b></p>
-                <p><b>@Model.searchTerm2 was searched on average every @Model.avgTermsPerHour2 hours</b></p>
+                @if (item.addressFrom != "")
+                {
+                    <p><b>@item.searchTerm1 = @item.searchTermCount1</b> compared to <b>@item.searchTerm2 = @item.searchTermCount2</b> in a <b>@item.proximity</b> mile radius of <b>@item.addressFrom</b></p>
+                }
+                else
+                {
+                    <p><b>@item.searchTerm1 = @item.searchTermCount1</b> compared to <b>@item.searchTerm2 = @item.searchTermCount2</b></p>
+                }
+
+                @if (item.avgTermsPerHour1 != 0)
+                {
+                    <p><b>@item.searchTerm1 was searched on average every @item.avgTermsPerHour1 hours</b></p>
+                }
+                @if (item.avgTermsPerHour1 != 0)
+                {
+                    <p><b>@item.searchTerm2 was searched on average every @item.avgTermsPerHour2 hours</b></p>
+                }
+
                 <hr />
             </div>
-}
+            }
         </div>
         }
     }

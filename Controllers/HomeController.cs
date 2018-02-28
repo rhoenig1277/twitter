@@ -25,16 +25,24 @@ namespace twitter.Controllers
         [HttpPost, ActionName("Index")]
         public ActionResult SearchTwitterPost(string btnClearSearch, string txtSearchTerm1, string txtSearchTerm2, string txtAddressFrom, string txtProximity)
         {
+            TweetsModel Model = new TweetsModel();
+            if (txtProximity == "" || txtProximity == "0")
+            {
+                Model.strError = "Proximity must be Greater than 0 and not empty.";
+            } else if (Convert.ToInt16(txtProximity) < 0)
+            {
+                Model.strError = "Proximity must be Greater than 0";
+            }
+
+            if (Model.strError != null && Model.strError != "")
+            {
+                return View(Model);
+            }
+
             string strSearchOne = txtSearchTerm1;
             string strSearchTwo = txtSearchTerm2;
             int tweetCountTerm1 = 0;
-            int tweetCountTerm2 = 0;
-            int term1AvgHoursBetweenTweets = 0;
-            int term1AvgMinutesBetweenTweets = 0;
-            int term2AvgHoursBetweenTweets = 0;
-            int term2AvgMinutesBetweenTweets = 0;
             List<TweetsModel> rtnResponse = new List<TweetsModel>();
-            TweetsModel Model = new TweetsModel();
             TweetsModel tempModel = new TweetsModel();
 
             System.Guid tweetID = Guid.NewGuid();

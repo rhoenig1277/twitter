@@ -189,15 +189,15 @@ namespace twitter.App_Code
                             }
                             if (!reader.IsDBNull(reader.GetOrdinal("avgTermsPerHour1")))
                             {
-                                tweetModel.addressFrom = reader.GetString(reader.GetOrdinal("avgTermsPerHour2")).ToString();
+                                tweetModel.avgTermsPerHour2 = int.Parse(reader.GetString(reader.GetOrdinal("avgTermsPerHour2")));
                             }
                             if (!reader.IsDBNull(reader.GetOrdinal("avgTermsPerMin1")))
                             {
-                                tweetModel.addressFrom = reader.GetString(reader.GetOrdinal("avgTermsPerMin1")).ToString();
+                                tweetModel.avgTermsPerMin1 = int.Parse(reader.GetString(reader.GetOrdinal("avgTermsPerMin1")));
                             }
                             if (!reader.IsDBNull(reader.GetOrdinal("avgTermsPerMin2")))
                             {
-                                tweetModel.addressFrom = reader.GetString(reader.GetOrdinal("avgTermsPerMin2")).ToString();
+                                tweetModel.avgTermsPerMin2 = int.Parse(reader.GetString(reader.GetOrdinal("avgTermsPerMin2")));
                             }
                             rtnResponse.Add(tweetModel);
                         }
