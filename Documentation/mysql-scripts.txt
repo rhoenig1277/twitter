@@ -4,11 +4,11 @@ DROP procedure IF EXISTS `putTweetSearch`;
 
 DELIMITER $$
 USE `mysqldatabase28603`$$
-CREATE DEFINER=`mysqldbuser`@`%` PROCEDURE `putTweetSearch`(IN tweetID varchar(255),IN searchTerm1 varchar(255),IN searchTerm1Count int,IN searchTerm2 varchar(255),IN searchTerm2Count int)
+CREATE DEFINER=`mysqldbuser`@`%` PROCEDURE `putTweetSearch`(IN tweetID varchar(255),IN searchTerm1 varchar(255),IN searchTerm1Count int,IN searchTerm2 varchar(255),IN searchTerm2Count int,IN addressFrom varchar(255),IN proximity varchar(255),IN avgTermsPerMin2 int,IN avgTermsPerMin1 int,IN avgTermsPerHour2 int, IN avgTermsPerHour1 int)
 BEGIN
     Insert into twittercount
-    (id,searchTerm1,searchTerm1Count,searchTerm2,searchTerm2Count,create_date) 
-    VALUES (tweetID, searchTerm1, searchTerm1Count, searchTerm2, searchTerm2Count, CURDATE());
+    (id,searchTerm1,searchTerm1Count,searchTerm2,searchTerm2Count,create_date,addressFrom,proximity,avgTermsPerHour1,avgTermsPerHour2,avgTermsPerMin2,avgTermsPerMin1) 
+    VALUES (tweetID, searchTerm1, searchTerm1Count, searchTerm2, searchTerm2Count, Now(), addressFrom, proximity,avgTermsPerHour1,avgTermsPerHour2,avgTermsPerMin2,avgTermsPerMin1);
 END$$
 
 DELIMITER ;
@@ -34,6 +34,12 @@ CREATE TABLE `twittercount` (
   `searchTerm2` varchar(255) DEFAULT NULL,
   `searchTerm2Count` int(11) DEFAULT NULL,
   `create_date` datetime DEFAULT NULL,
+  proximity varchar(255) DEFAULT NULL,
+  addressFrom varchar(255) DEFAULT NULL,
+  avgTermsPerHour1 int(11) DEFAULT NULL,
+  avgTermsPerHour2 int(11) DEFAULT NULL,
+  avgTermsPerMin1 int(11) DEFAULT NULL,
+  avgTermsPerMin2 int(11) DEFAULT NULL
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
