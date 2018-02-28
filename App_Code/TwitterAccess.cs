@@ -144,7 +144,7 @@ namespace twitter.App_Code
             catch (Exception ex)
             {
                 string strError = "";
-                strError = "No Longitude/Latitude Found for " + addressFrom;
+                strError = "No Longitude/Latitude Found for " + addressFrom + ". Please enter a valid City, State.";
                 return strError;
             }
         }

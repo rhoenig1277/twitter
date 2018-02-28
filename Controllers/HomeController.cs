@@ -26,13 +26,20 @@ namespace twitter.Controllers
         public ActionResult SearchTwitterPost(string btnClearSearch, string txtSearchTerm1, string txtSearchTerm2, string txtAddressFrom, string txtProximity)
         {
             TweetsModel Model = new TweetsModel();
+            int chkInt = 0;
             if (txtProximity == "" || txtProximity == "0")
             {
                 Model.strError = "Proximity must be Greater than 0 and not empty.";
-            } else if (Convert.ToInt16(txtProximity) < 0)
+            }
+            else if (!int.TryParse(txtProximity, out chkInt))
+            {
+                Model.strError = "Proximity must be an integer";
+            }
+            else if (Convert.ToInt16(txtProximity) < 0)
             {
                 Model.strError = "Proximity must be Greater than 0";
             }
+            
 
             if (Model.strError != null && Model.strError != "")
             {
